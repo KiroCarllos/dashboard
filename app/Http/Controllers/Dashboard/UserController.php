@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Permission;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -41,7 +42,19 @@ class UserController extends Controller
     public
     function create()
     {
-        return view('dashboard.users.create');
+        $permissions = Permission::query()->select("display_name")->get();
+        foreach ($permissions as $permission){
+            $models[] =explode(" ",$permission->display_name)[1];
+        }
+        $models = array_unique($models);
+        foreach ($models as $i=>$model){
+            $actions = Permission::query()->select("name")->where("display_name",'like', '%' . $model . '%')->get();
+            foreach ($actions as $j=>$action){
+                $maps[$model][$j] = explode("_",$action->name)[0];
+            }
+        }
+
+        return view('dashboard.users.create',compact("models","maps"));
 
     }//end of create
 

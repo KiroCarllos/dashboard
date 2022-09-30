@@ -69,30 +69,19 @@
                         <div class="form-group">
                             <label>@lang('site.permissions')</label>
                             <div class="nav-tabs-custom">
-
-                                @php
-                                    $models = ['users'];
-                                    $maps = ['create', 'read', 'update', 'delete'];
-                                @endphp
-
                                 <ul class="nav nav-tabs">
                                     @foreach ($models as $index=>$model)
-                                        <li class="{{ $index == 0 ? 'active' : '' }}"><a href="#{{ $model }}" data-toggle="tab">@lang('site.' . $model)</a></li>
+                                        <li class="{{ $index == 0 ? 'active' : '' }}"><a href="#{{ $model }}" data-toggle="tab">@lang('site.' . strtolower($model))</a></li>
                                     @endforeach
                                 </ul>
-
                                 <div class="tab-content">
+                                    @foreach ($maps as $index=>$map)
+                                        <div class="tab-pane {{ $loop->first == 1 ? 'active' : '' }}" id="{{ $index }}">
+                                            @foreach ($map as $m)
 
-                                    @foreach ($models as $index=>$model)
-
-                                        <div class="tab-pane {{ $index == 0 ? 'active' : '' }}" id="{{ $model }}">
-
-                                            @foreach ($maps as $map)
-                                                <label><input type="checkbox" name="permissions[]" value="{{ $map . '_' . $model }}"> @lang('site.' . $map)</label>
+                                                <label><input type="checkbox" name="permissions[]" value="{{ $m . '_' . $index }}"> @lang('site.' . $m)</label>
                                             @endforeach
-
                                         </div>
-
                                     @endforeach
 
                                 </div><!-- end of tab content -->
